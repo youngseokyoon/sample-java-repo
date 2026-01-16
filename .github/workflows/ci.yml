@@ -23,13 +23,7 @@ jobs:
       test-command: "mvn test"
       language: java
   
-  upload:
-    needs: [build, test]
-    uses: youngseokyoon/central-workflows/.github/workflows/upload-artifact.yml@main
-    with:
-      artifact-name: java-jar-file
-      artifact-path: target/*.jar
-      retention-days: 30
+  # upload job 제거 - compile-java.yml이 자동으로 업로드함
 
   # Matrix strategy example - build only, no artifact upload
   test-matrix:
