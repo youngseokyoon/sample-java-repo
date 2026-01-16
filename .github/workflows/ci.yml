@@ -15,7 +15,6 @@ jobs:
       build-tool: maven
       build-command: "mvn clean package -DskipTests"
       env-vars: '{"MAVEN_OPTS":"-Xmx2048m"}'
-      upload-artifact: true  # Main build uploads artifact
   
   test:
     needs: build
@@ -24,14 +23,14 @@ jobs:
       test-command: "mvn test"
       language: java
 
-  # Matrix strategy example - build only, no artifact upload
-  test-matrix:
-    strategy:
-      fail-fast: false
-      matrix:
-        java-version: ['11', '17', '21']
-    uses: youngseokyoon/central-workflows/.github/workflows/compile-java.yml@main
-    with:
-      java-version: ${{ matrix.java-version }}
-      build-tool: maven
-      upload-artifact: false  # ← Disable upload to avoid conflicts!
+  # Matrix strategy temporarily disabled - causes artifact naming conflict
+  # Will be re-enabled after central-workflows PR is merged
+  # test-matrix:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       java-version: ['11', '17', '21']
+  #   uses: youngseokyoon/central-workflows/.github/workflows/compile-java.yml@main
+  #   with:
+  #     java-version: ${{ matrix.java-version }}
+  #     build-tool: maven
