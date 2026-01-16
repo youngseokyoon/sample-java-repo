@@ -31,9 +31,10 @@ jobs:
       artifact-path: target/*.jar
       retention-days: 30
 
-  # Matrix strategy example
+  # Matrix strategy example - build only, no artifact upload
   test-matrix:
     strategy:
+      fail-fast: false
       matrix:
         java-version: ['11', '17', '21']
     uses: youngseokyoon/central-workflows/.github/workflows/compile-java.yml@main
