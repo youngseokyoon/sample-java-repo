@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: youngseokyoon/central-workflows/.github/workflows/compile-java.yml@main
+    with:
+      java-version: '17'
+      build-tool: maven
+      build-command: "mvn clean package -DskipTests"
+      env-vars: '{"MAVEN_OPTS":"-Xmx2048m"}'
+  
+  test:
+    needs: build
+    uses: youngseokyoon/central-workflows/.github/workflows/reusable-test.yml@main
+    with:
+      test-command: "mvn test"
+      language: java
+  
+  upload:
+    needs: [build, test]
+    uses: youngseokyoon/central-workflows/.github/workflows/upload-artifact.yml@main
+    with:
+      artifact-name: java-jar-file
+      artifact-path: target/*.jar
+      retention-days: 30
+
+  # Matrix strategy example
+  test-matrix:
+    strategy:
+      matrix:
+        java-version: ['11', '17', '21']
+    uses: youngseokyoon/central-workflows/.github/workflows/compile-java.yml@main
+    with:
+      java-version: ${{ matrix.java-version }}
+      build-tool: maven
